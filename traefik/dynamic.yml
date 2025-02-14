@@ -46,14 +46,14 @@ http:
     bixa:
       loadBalancer:
         servers:
-          - url: "http://host.docker.internal:5002"
+          - url: "http://172.17.0.1:5002"
 
     jsonfy:
       loadBalancer:
         servers:
-          - url: "http://host.docker.internal:5003"
+          - url: "http://172.17.0.1:5003"
 
     silvy:
       loadBalancer:
         servers:
-          - url: "http://host.docker.internal:5004"
+          - url: "http://172.17.0.1:5004"
