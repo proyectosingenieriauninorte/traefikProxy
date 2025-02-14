@@ -1,0 +1,59 @@
+http:
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https
+
+  routers:
+    redirect-http:
+      rule: "Host(`proyectosingenieria.uninorte.edu.co`)"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "https-redirect"
+      service: "noop"
+
+    bixa:
+      rule: "PathPrefix(`/bixa`)"
+      service: "bixa"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "letsencrypt"
+
+    jsonfy:
+      rule: "PathPrefix(`/jsonfy`)"
+      service: "jsonfy"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "letsencrypt"
+
+    silvy:
+      rule: "PathPrefix(`/silvy`)"
+      service: "silvy"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "letsencrypt"
+
+  services:
+    noop:
+      loadBalancer:
+        servers:
+          - url: "http://localhost"
+
+    bixa:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:5002"
+
+    jsonfy:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:5003"
+
+    silvy:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:5004"
