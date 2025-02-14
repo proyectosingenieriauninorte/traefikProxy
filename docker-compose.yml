@@ -6,6 +6,7 @@ services:
     restart: always
     command:
       - "--api.dashboard=true"
+      - "--api.insecure=true"  # Allow API access (only for debugging)
       - "--providers.file.filename=/etc/traefik/dynamic.yml"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
