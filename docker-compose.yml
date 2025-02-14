@@ -6,20 +6,20 @@ services:
     restart: always
     command:
       - "--api.dashboard=true"
-      - "--providers.file.filename=/etc/traefik/dynamic.yml"  # Load external routing rules
+      - "--api.insecure=true"  # Allow dashboard access (remove for production)
+      - "--providers.file.filename=/etc/traefik/dynamic.yml"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.email=admin@example.com"  # Change to your email
+      - "--certificatesresolvers.letsencrypt.acme.email=augustosalazar@uninorte.edu.co"
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
       - "--log.level=DEBUG"
 
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"  # Optional Traefik dashboard
+      - "8080:8080"  # Dashboard port
 
     volumes:
       - "./traefik/dynamic.yml:/etc/traefik/dynamic.yml"
-      - "./letsencrypt:/letsencrypt"  # Persistent certificate storage
-
+      - "./letsencrypt:/letsencrypt"
