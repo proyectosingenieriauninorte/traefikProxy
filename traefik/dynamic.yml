@@ -6,7 +6,7 @@ http:
 
   routers:
     homepage:
-      rule: "PathPrefix(`/`)"
+      rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/`)"
       service: "homepage"
       entryPoints:
         - "websecure"
@@ -14,7 +14,7 @@ http:
         certResolver: "letsencrypt"
 
     bixa:
-      rule: "PathPrefix(`/bixa`)"
+      rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/bixa`)"
       service: "bixa"
       entryPoints:
         - "websecure"
@@ -22,7 +22,7 @@ http:
         certResolver: "letsencrypt"
 
     jsonfy:
-      rule: "PathPrefix(`/jsonfy`)"
+      rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/jsonfy`)"
       service: "jsonfy"
       entryPoints:
         - "websecure"
@@ -30,7 +30,7 @@ http:
         certResolver: "letsencrypt"
 
     silvy:
-      rule: "PathPrefix(`/silvy`)"
+      rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/silvy`)"
       service: "silvy"
       entryPoints:
         - "websecure"
