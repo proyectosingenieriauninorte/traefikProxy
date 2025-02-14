@@ -5,13 +5,13 @@ http:
         scheme: https
 
   routers:
-    redirect-http:
-      rule: "Host(`proyectosingenieria.uninorte.edu.co`)"
+    homepage:
+      rule: "PathPrefix(`/`)"
+      service: "homepage"
       entryPoints:
-        - "web"
-      middlewares:
-        - "https-redirect"
-      service: "noop"
+        - "websecure"
+      tls:
+        certResolver: "letsencrypt"
 
     bixa:
       rule: "PathPrefix(`/bixa`)"
@@ -38,10 +38,10 @@ http:
         certResolver: "letsencrypt"
 
   services:
-    noop:
+    homepage:
       loadBalancer:
         servers:
-          - url: "http://localhost"
+          - url: "http://homepage"
 
     bixa:
       loadBalancer:
