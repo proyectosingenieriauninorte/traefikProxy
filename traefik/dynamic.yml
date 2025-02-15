@@ -1,8 +1,19 @@
 http:
   middlewares:
-    https-redirect:
-      redirectScheme:
-        scheme: https
+    strip-bixa:
+      stripPrefix:
+        prefixes:
+          - "/bixa"
+
+    strip-jsonfy:
+      stripPrefix:
+        prefixes:
+          - "/jsonfy"
+
+    strip-silvy:
+      stripPrefix:
+        prefixes:
+          - "/silvy"
 
   routers:
     homepage:
@@ -20,6 +31,8 @@ http:
         - "websecure"
       tls:
         certResolver: "letsencrypt"
+      middlewares:
+        - "strip-bixa"
 
     jsonfy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/jsonfy`)"
@@ -28,6 +41,8 @@ http:
         - "websecure"
       tls:
         certResolver: "letsencrypt"
+      middlewares:
+        - "strip-jsonfy"
 
     silvy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/silvy`)"
@@ -36,12 +51,14 @@ http:
         - "websecure"
       tls:
         certResolver: "letsencrypt"
+      middlewares:
+        - "strip-silvy"
 
   services:
     homepage:
       loadBalancer:
         servers:
-          - url: "http://homepage"
+          - url: "http://172.17.0.1:80"
 
     bixa:
       loadBalancer:
