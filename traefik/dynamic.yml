@@ -17,8 +17,8 @@ http:
 
     rewrite-bixa-assets:
       replacePathRegex:
-        regex: "^/bixa/(.*)$"
-        replacement: "/$1"
+        regex: "^/(main\\.js|main\\.css|app\\.js|.*\\.png|.*\\.jpg|.*\\.ico|.*\\.woff2)$"
+        replacement: "/bixa/$1"
 
     rewrite-jsonfy-assets:
       replacePathRegex:
