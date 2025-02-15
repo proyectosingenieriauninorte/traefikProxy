@@ -15,6 +15,21 @@ http:
         prefixes:
           - "/silvy"
 
+    rewrite-bixa-assets:
+      replacePathRegex:
+        regex: "^/bixa/(.*)$"
+        replacement: "/$1"
+
+    rewrite-jsonfy-assets:
+      replacePathRegex:
+        regex: "^/jsonfy/(.*)$"
+        replacement: "/$1"
+
+    rewrite-silvy-assets:
+      replacePathRegex:
+        regex: "^/silvy/(.*)$"
+        replacement: "/$1"
+
   routers:
     homepage:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/`)"
@@ -33,6 +48,7 @@ http:
         certResolver: "letsencrypt"
       middlewares:
         - "strip-bixa"
+        - "rewrite-bixa-assets"
 
     jsonfy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/jsonfy`)"
@@ -43,6 +59,7 @@ http:
         certResolver: "letsencrypt"
       middlewares:
         - "strip-jsonfy"
+        - "rewrite-jsonfy-assets"
 
     silvy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/silvy`)"
@@ -53,6 +70,7 @@ http:
         certResolver: "letsencrypt"
       middlewares:
         - "strip-silvy"
+        - "rewrite-silvy-assets"
 
   services:
     homepage:
