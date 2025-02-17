@@ -2,17 +2,17 @@ http:
   middlewares:
     fix-bixa-path:
       replacePathRegex:
-        regex: "^/bixa/(.*)"
+        regex: "^/bixa/?(.*)"
         replacement: "/$1"
 
     fix-jsonfy-path:
       replacePathRegex:
-        regex: "^/jsonfy/(.*)"
+        regex: "^/jsonfy/?(.*)"
         replacement: "/$1"
 
     fix-silvy-path:
       replacePathRegex:
-        regex: "^/silvy/(.*)"
+        regex: "^/silvy/?(.*)"
         replacement: "/$1"
 
   routers:
