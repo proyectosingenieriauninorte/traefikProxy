@@ -19,7 +19,7 @@ get_files_from_container() {
         BEGIN { dir="" }
         /^\/.*:$/ { gsub(":", "", $0); dir=$0; next }
         /^[^dt]/ { print dir "/" $NF }
-    '
+    ' | grep -v '/:$'  # Ignore directory listings
 }
 
 # Fetch file lists for each container
@@ -31,8 +31,13 @@ for container in "${CONTAINERS[@]}"; do
         REL_PATH=${file#"$FOLDER_PATH/"}  # Remove base path
         APP_NAME=${container%-app}        # Extract app name
         URL_PATH="/$APP_NAME/$REL_PATH"
-        URL_MAP[$URL_PATH]=$BASE_URL$URL_PATH
-        CONTAINER_PATHS[$URL_PATH]=$file
+        URL_PATH=${URL_PATH//\/\//\/}  # Fix double slashes in paths
+
+        # Ensure valid file paths before adding to test
+        if [[ ! "$REL_PATH" =~ /$ ]]; then
+            URL_MAP[$URL_PATH]="$BASE_URL$URL_PATH"
+            CONTAINER_PATHS[$URL_PATH]=$file
+        fi
     done
 done
 
