@@ -1,5 +1,6 @@
 http:
   middlewares:
+    # Middleware to strip the project path before forwarding requests
     strip-bixa:
       stripPrefix:
         prefixes:
@@ -15,20 +16,21 @@ http:
         prefixes:
           - "/silvy"
 
-    rewrite-bixa-assets:
+    # Middleware to rewrite asset paths for all projects
+    rewrite-assets:
       replacePathRegex:
-        regex: "^/(main\\.js|main\\.css|app\\.js|.*\\.png|.*\\.jpg|.*\\.ico|.*\\.woff2)$"
-        replacement: "/bixa/$1"
+        regex: "^/(main\\.js|main\\.css|.*\\.png|.*\\.jpg|.*\\.ico|.*\\.woff2|.*\\.svg|.*\\.ttf|.*\\.eot|.*\\.otf)$"
+        replacement: "/{1}/{2}"
 
-    rewrite-jsonfy-assets:
-      replacePathRegex:
-        regex: "^/jsonfy/(.*)$"
-        replacement: "/$1"
-
-    rewrite-silvy-assets:
-      replacePathRegex:
-        regex: "^/silvy/(.*)$"
-        replacement: "/$1"
+    # Security Headers to ensure assets load correctly
+    add-security-headers:
+      headers:
+        customResponseHeaders:
+          Content-Security-Policy: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; media-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'"
+          Referrer-Policy: "no-referrer"
+          X-Frame-Options: "SAMEORIGIN"
+          X-Content-Type-Options: "nosniff"
+          X-XSS-Protection: "1; mode=block"
 
   routers:
     homepage:
@@ -48,7 +50,8 @@ http:
         certResolver: "letsencrypt"
       middlewares:
         - "strip-bixa"
-        - "rewrite-bixa-assets"
+        - "rewrite-assets"
+        - "add-security-headers"
 
     jsonfy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/jsonfy`)"
@@ -59,7 +62,8 @@ http:
         certResolver: "letsencrypt"
       middlewares:
         - "strip-jsonfy"
-        - "rewrite-jsonfy-assets"
+        - "rewrite-assets"
+        - "add-security-headers"
 
     silvy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/silvy`)"
@@ -70,7 +74,8 @@ http:
         certResolver: "letsencrypt"
       middlewares:
         - "strip-silvy"
-        - "rewrite-silvy-assets"
+        - "rewrite-assets"
+        - "add-security-headers"
 
   services:
     homepage:
