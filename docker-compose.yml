@@ -30,7 +30,6 @@ services:
       - "./html:/usr/share/nginx/html:ro"
       - "./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.homepage.rule=Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/`)"
+      - "traefik.http.routers.homepage.rule=Host(`proyectosingenieria.uninorte.edu.co`)"
       - "traefik.http.routers.homepage.entrypoints=websecure"
       - "traefik.http.routers.homepage.tls.certresolver=letsencrypt"

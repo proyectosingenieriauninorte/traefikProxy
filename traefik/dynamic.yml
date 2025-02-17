@@ -23,14 +23,12 @@ http:
 
   routers:
     homepage:
-      rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/`)"
+      rule: "Host(`proyectosingenieria.uninorte.edu.co`) && Path(`/`)"
       service: "homepage"
       entryPoints:
         - "websecure"
       tls:
         certResolver: "letsencrypt"
-      middlewares:
-        - "fix-missing-assets"
 
     bixa:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/bixa`)"
@@ -41,6 +39,7 @@ http:
         certResolver: "letsencrypt"
       middlewares:
         - "fix-bixa-path"
+        - "fix-missing-assets"
 
     jsonfy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/jsonfy`)"
@@ -66,7 +65,7 @@ http:
     homepage:
       loadBalancer:
         servers:
-          - url: "http://172.17.0.1:80"
+          - url: "http://172.17.0.1"
 
     bixa:
       loadBalancer:
