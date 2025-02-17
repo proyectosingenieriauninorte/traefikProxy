@@ -1,36 +1,19 @@
 http:
   middlewares:
-    # Middleware to strip project paths before forwarding requests
-    strip-bixa:
-      stripPrefix:
-        prefixes:
-          - "/bixa"
-
-    strip-jsonfy:
-      stripPrefix:
-        prefixes:
-          - "/jsonfy"
-
-    strip-silvy:
-      stripPrefix:
-        prefixes:
-          - "/silvy"
-
-    # Middleware to rewrite asset paths for all projects
-    rewrite-assets:
+    fix-bixa-path:
       replacePathRegex:
-        regex: "^/(main\\.js|main\\.css|.*\\.png|.*\\.jpg|.*\\.ico|.*\\.woff2|.*\\.svg|.*\\.ttf|.*\\.eot|.*\\.otf)$"
-        replacement: "/{1}/{2}"
+        regex: "^/bixa/(.*)"
+        replacement: "/$1"
 
-    # Security Headers to allow external stylesheets and correct CSP issues
-    add-security-headers:
-      headers:
-        customResponseHeaders:
-          Content-Security-Policy: "default-src 'self' https://unpkg.com; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: https://unpkg.com; media-src 'self'; connect-src 'self'; font-src 'self' https://unpkg.com; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'"
-          Referrer-Policy: "no-referrer"
-          X-Frame-Options: "SAMEORIGIN"
-          X-Content-Type-Options: "nosniff"
-          X-XSS-Protection: "1; mode=block"
+    fix-jsonfy-path:
+      replacePathRegex:
+        regex: "^/jsonfy/(.*)"
+        replacement: "/$1"
+
+    fix-silvy-path:
+      replacePathRegex:
+        regex: "^/silvy/(.*)"
+        replacement: "/$1"
 
   routers:
     homepage:
@@ -40,8 +23,6 @@ http:
         - "websecure"
       tls:
         certResolver: "letsencrypt"
-      middlewares:
-        - "add-security-headers"
 
     bixa:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/bixa`)"
@@ -51,9 +32,7 @@ http:
       tls:
         certResolver: "letsencrypt"
       middlewares:
-        - "strip-bixa"
-        - "rewrite-assets"
-        - "add-security-headers"
+        - "fix-bixa-path"
 
     jsonfy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/jsonfy`)"
@@ -63,9 +42,7 @@ http:
       tls:
         certResolver: "letsencrypt"
       middlewares:
-        - "strip-jsonfy"
-        - "rewrite-assets"
-        - "add-security-headers"
+        - "fix-jsonfy-path"
 
     silvy:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/silvy`)"
@@ -75,9 +52,7 @@ http:
       tls:
         certResolver: "letsencrypt"
       middlewares:
-        - "strip-silvy"
-        - "rewrite-assets"
-        - "add-security-headers"
+        - "fix-silvy-path"
 
   services:
     homepage:
