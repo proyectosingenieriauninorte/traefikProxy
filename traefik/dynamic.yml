@@ -15,6 +15,12 @@ http:
         regex: "^/silvy/?(.*)"
         replacement: "/$1"
 
+    fix-missing-assets:
+      redirectRegex:
+        regex: "^/(main\\.css|main\\.js|favicon\\.ico)$"
+        replacement: "/bixa/$1"
+        permanent: false
+
   routers:
     homepage:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/`)"
@@ -23,6 +29,8 @@ http:
         - "websecure"
       tls:
         certResolver: "letsencrypt"
+      middlewares:
+        - "fix-missing-assets"
 
     bixa:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/bixa`)"
