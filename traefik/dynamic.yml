@@ -1,6 +1,6 @@
 http:
   middlewares:
-    # Middleware to strip the project path before forwarding requests
+    # Middleware to strip project paths before forwarding requests
     strip-bixa:
       stripPrefix:
         prefixes:
@@ -22,11 +22,11 @@ http:
         regex: "^/(main\\.js|main\\.css|.*\\.png|.*\\.jpg|.*\\.ico|.*\\.woff2|.*\\.svg|.*\\.ttf|.*\\.eot|.*\\.otf)$"
         replacement: "/{1}/{2}"
 
-    # Security Headers to ensure assets load correctly
+    # Security Headers to allow external stylesheets and correct CSP issues
     add-security-headers:
       headers:
         customResponseHeaders:
-          Content-Security-Policy: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; media-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'"
+          Content-Security-Policy: "default-src 'self' https://unpkg.com; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: https://unpkg.com; media-src 'self'; connect-src 'self'; font-src 'self' https://unpkg.com; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'"
           Referrer-Policy: "no-referrer"
           X-Frame-Options: "SAMEORIGIN"
           X-Content-Type-Options: "nosniff"
@@ -40,6 +40,8 @@ http:
         - "websecure"
       tls:
         certResolver: "letsencrypt"
+      middlewares:
+        - "add-security-headers"
 
     bixa:
       rule: "Host(`proyectosingenieria.uninorte.edu.co`) && PathPrefix(`/bixa`)"
