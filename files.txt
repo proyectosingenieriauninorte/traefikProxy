@@ -1,0 +1,16 @@
+proyecto@servidorWebPU:~/traefikProxy$ docker exec -it bixa-app ls -lh /usr/local/apache2/htdocs/
+total 68K
+-rw-rw-r-- 1 root root 6.5K Apr 16  2024 index.html
+-rw-rw-r-- 1 root root 4.0K Apr 16  2024 main.css
+-rw-rw-r-- 1 root root  53K Apr 16  2024 main.js
+proyecto@servidorWebPU:~/traefikProxy$ docker exec -it jsonfy-app ls -lh /usr/local/apache2/htdocs/
+total 36K
+-rw-rw-r-- 1 root root  17K Apr 16  2024 app.js
+drwxrwxr-x 3 root root 4.0K Apr 16  2024 img
+-rw-rw-r-- 1 root root 1.9K Apr 16  2024 index.html
+drwxrwxr-x 2 root root 4.0K Apr 16  2024 pages
+drwxrwxr-x 2 root root 4.0K Apr 16  2024 styles
+proyecto@servidorWebPU:~/traefikProxy$ docker exec -it silvy-app ls -lh /usr/local/apache2/htdocs/
+total 24K
+-rw-rw-r-- 1 root root 5.6K Apr 16  2024 estilo.css
+-rw-rw-r-- 1 root root  14K Apr 16  2024 
