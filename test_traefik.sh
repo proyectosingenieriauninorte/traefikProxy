@@ -41,7 +41,7 @@ check_files() {
     container=$1
     path=$2
     echo "🛠 Checking $container ($path)"
-    docker exec -it "$container" ls -lh "$path"
+    docker exec -it "$container" ls -lhR "$path"
 }
 
 check_files "bixa-app" "/usr/local/apache2/htdocs/"
@@ -49,29 +49,34 @@ check_files "jsonfy-app" "/usr/local/apache2/htdocs/"
 check_files "silvy-app" "/usr/local/apache2/htdocs/"
 
 echo "----------------------------------"
-echo "🔍 Testing Direct Access from Traefik Container..."
+echo "🔍 Checking MIME Types of Assets..."
 
-# Test file access inside Traefik container
-docker exec -it traefikproxy-traefik-1 sh -c "
-    echo 'Checking direct file access from Traefik...'
-    wget -qO- http://172.17.0.1:5002/main.css
-    wget -qO- http://172.17.0.1:5003/styles/main.css
-    wget -qO- http://172.17.0.1:5004/estilo.css
-"
-
-echo "----------------------------------"
-echo "🔍 Checking Apache/Nginx MIME Type Configuration..."
-
-# Check Apache/Nginx MIME type settings
-check_mime() {
-    container=$1
-    echo "🛠 Checking MIME types in $container"
-    docker exec -it "$container" cat /usr/local/apache2/conf/httpd.conf | grep "AddType"
+# Function to check actual HTTP headers
+check_mime_type() {
+    url=$1
+    response=$(curl -sI "$url" | grep -i "Content-Type")
+    echo "$response - $url"
 }
 
-check_mime "bixa-app"
-check_mime "jsonfy-app"
-check_mime "silvy-app"
+check_mime_type "https://proyectosingenieria.uninorte.edu.co/bixa/main.css"
+check_mime_type "https://proyectosingenieria.uninorte.edu.co/bixa/main.js"
+
+echo "----------------------------------"
+echo "🔍 Extracting Asset URLs from index.html..."
+
+# Function to extract and validate asset URLs from HTML
+extract_assets() {
+    url=$1
+    echo "🔍 Checking asset links in $url"
+    assets=$(curl -s "$url" | grep -oE 'href="[^"]+"|src="[^"]+"' | cut -d'"' -f2)
+
+    for asset in $assets; do
+        full_url="https://proyectosingenieria.uninorte.edu.co$asset"
+        check_url "$full_url"
+    done
+}
+
+extract_assets "https://proyectosingenieria.uninorte.edu.co/bixa"
 
 echo "----------------------------------"
 echo "🎯 Test Completed!"
